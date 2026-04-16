@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -18,10 +18,10 @@ public class Enemy : MonoBehaviour
         // Move para esquerda
         transform.Translate(Vector2.left * velocity * Time.deltaTime);
 
-        // Se sair da tela, se destrói para não pesar o jogo
-        if (transform.position.x < -15f) 
-        { 
-            Destroy(gameObject); 
+        // Se sair da tela, se destrï¿½i para nï¿½o pesar o jogo
+        if (transform.position.x < -15f)
+        {
+            Destroy(gameObject);
         }
 
     }
@@ -31,6 +31,9 @@ public class Enemy : MonoBehaviour
     {
         if (collider.CompareTag("Projectile")) // Tag fireball do player
         {
+            // Recebe os pontos pelo acerto a fireball inimiga
+            FindObjectOfType<GameManager>().AddBonus(10);
+
             Destroy(gameObject); //enemy morre
             Destroy(collider.gameObject); //player perde sua fireball
         }

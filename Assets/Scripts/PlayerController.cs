@@ -58,6 +58,17 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("Attack");            
             //Attack();
         }
+
+        // Crouch (left shift ou c)
+        if (Input.GetButton("Fire3") || Input.GetKey(KeyCode.C))
+        {
+            animator.SetBool("Crouch", true);
+            horizontalMove = 0;
+        }
+        else
+        {
+            animator.SetBool("Crouch", false);
+        }
     }
 
     void FixedUpdate()
