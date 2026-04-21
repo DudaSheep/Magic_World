@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -34,17 +34,17 @@ public class PlayerController : MonoBehaviour
         Debug.Log(horizontalMove);
 
         // Flipar o personagem
-        if(horizontalMove > 0 && !facingRight)
+        if (horizontalMove > 0 && !facingRight)
         {
             Flip();
         }
-        else if(horizontalMove < 0 && facingRight)
+        else if (horizontalMove < 0 && facingRight)
         {
             Flip();
         }
 
         // Checar se esta querendo PULAR
-        if(Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump"))
         {
             animator.SetBool("Jump", true);
             rb.velocity = new Vector2(rb.velocity.x, forceJump);
@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            animator.SetTrigger("Attack");            
+            animator.SetTrigger("Attack");
             //Attack();
         }
 
@@ -118,8 +118,10 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             Debug.Log("O Mago foi atingido!");
-            // Reinicia a cena atual
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+            FindObjectOfType<GameManager>().ShowGameOver();
+            // inpede que o gamer ande morto
+            gameObject.SetActive(false);
         }
     }
 
