@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public GameObject fireballPrefab;
     public Transform firePoint;
     public float fireballSpeed = 10f;
+    private Vector3 targetedMousePos;
 
 
     // Start is called before the first frame update
@@ -55,8 +56,11 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
+            // Salva a posicao exata do clique
+            targetedMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            targetedMousePos.z = 0;
+
             animator.SetTrigger("Attack");
-            //Attack();
         }
 
         // Crouch (left shift ou c)
@@ -96,17 +100,22 @@ public class PlayerController : MonoBehaviour
         transform.localScale = scale;
     }
 
-    // ATACAR
+    // ATACAR com FIREBALL
     public void Attack()
     {
-        // fireball na posicao do cajadp
-        GameObject fireBall = Instantiate(fireballPrefab, firePoint.position, firePoint.rotation);
+        CheckMirrorFlip();
 
-        // velocidade a firrball
+        Vector2 direction = (targetedMousePos - firePoint.position).normalized;
+
+        // Rotacao da fireball para "olhar"
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        // instancia a fireball
+        GameObject fireBall = Instantiate(fireballPrefab, firePoint.position, Quaternion.Euler(0, 0, angle));
+
+        // velocidade a fireball
         Rigidbody2D rbFireball = fireBall.GetComponent<Rigidbody2D>();
-        float direction = facingRight ? 1f : -1f;
-        rbFireball.velocity = new Vector2(direction * fireballSpeed, 0f);
-
+        rbFireball.velocity = direction * fireballSpeed;
 
         // destruir fireball 2s
         Destroy(fireBall, 2f);
@@ -122,6 +131,21 @@ public class PlayerController : MonoBehaviour
             FindObjectOfType<GameManager>().ShowGameOver();
             // inpede que o gamer ande morto
             gameObject.SetActive(false);
+        }
+    }
+
+    // Flipar o personagem de acordo com a pos do mouse
+    void CheckMirrorFlip()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // Se o mouse estiver a direita e o player estiver olhando para a esquerda
+        if (mousePos.x > transform.position.x && !facingRight)
+        {
+            Flip();
+        }
+        else if (mousePos.x < transform.position.x && facingRight)
+        {
+            Flip();
         }
     }
 

@@ -2936,7 +2936,8 @@ MonoBehaviour:
   timeSpawn: 2
   minHeight: -2
   maxHeight: 2
-  timeToStartGhosts: 5
+  timeToStartGhosts: 30
+  maxGhosts: 5
 --- !u!4 &1297603114
 Transform:
   m_ObjectHideFlags: 0

@@ -16,9 +16,17 @@ public class SpawnManager : MonoBehaviour
     public float timeToStartGhosts = 20f; // tempo para comecar a aparecer o ghost fireballs
     private float gameTimer = 0f; //tempo de game
 
+    [Header("Limites da GhostFireball")]
+    public int maxGhosts = 5;            // Limite total de 5
+    private int currentGhostCount = 0;
+    private Transform playerTransform;
+
     // Start is called before the first frame update
     void Start()
     {
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null) playerTransform = playerObj.transform;
+
         // Come�a a chamar a fun��o de criar inimigos InvokeRepeating("NomeDaFuncao", tempoParaCome�ar, intervaloEntreRepeti��es)
         InvokeRepeating("Spawn", 1f, timeSpawn);
         // Chama a fun��o que aumenta a dificuldade a cada 7 segundos
@@ -27,25 +35,44 @@ public class SpawnManager : MonoBehaviour
 
     void Spawn()
     {
-        // Altura random para o inimigo aparecer
-        float posYRandom = Random.Range(minHeight, maxHeight);
-        Vector3 posSpawn = new Vector3(12f, posYRandom, 0);
-
-        int ghostCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
-
-        // Logica das enemy firaballs direfentes
-        if (gameTimer > timeToStartGhosts)
+        // Se já passou o tempo e ainda não atingiu o limite de 5
+        if (gameTimer > timeToStartGhosts && currentGhostCount < maxGhosts && Random.value > 0.5f)
         {
-            // Spawna a fantasma roxa - ghost fireballs
-            Instantiate(enemyGhostPrefab, posSpawn, Quaternion.identity);
+            SpawnGhost();
         }
         else
         {
-            // Spawna a Enemy_Fireball normal
-            Instantiate(enemyPrefab, posSpawn, Quaternion.identity);
+            SpawnNormal();
         }
 
+    }
 
+    void SpawnNormal()
+    {
+        float posYRandom = Random.Range(minHeight, maxHeight);
+        Vector3 posSpawn = new Vector3(12f, posYRandom, 0);
+        Instantiate(enemyPrefab, posSpawn, Quaternion.identity);
+    }
+
+    void SpawnGhost()
+    {
+        if (playerTransform == null) return;
+
+        Vector3 posSpawn;
+
+        // Randomico 50% de chance de vir da frente, 50% de vir de cima
+        if (Random.value > 0.5f)
+        {
+            // Vendo da frente
+            posSpawn = new Vector3(playerTransform.position.x + 8f, playerTransform.position.y, 0);
+        }
+        else
+        {
+            // Vindo de cima
+            posSpawn = new Vector3(playerTransform.position.x + Random.Range(-2f, 2f), 6f, 0);
+        }
+
+        Instantiate(enemyGhostPrefab, posSpawn, Quaternion.identity);
     }
 
     void IncreaseDifficulty()
@@ -63,5 +90,8 @@ public class SpawnManager : MonoBehaviour
     void Update()
     {
         gameTimer += Time.deltaTime; //contar o tempo real de game
+
+        // Atualiza a contagem de fantasmas vivos no mapa
+        currentGhostCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
     }
 }
