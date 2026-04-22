@@ -2932,9 +2932,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 3225101634126724794, guid: c434e10c1a23dc14681295ff241df9db, type: 3}
+  enemyGhostPrefab: {fileID: 4952359243488086271, guid: d13bd824de6bfe143a35694315844366, type: 3}
   timeSpawn: 2
   minHeight: -2
   maxHeight: 2
+  timeToStartGhosts: 30
+  maxGhosts: 5
 --- !u!4 &1297603114
 Transform:
   m_ObjectHideFlags: 0
