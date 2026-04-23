@@ -123,4 +123,16 @@ public class GameManager : MonoBehaviour
         Debug.Log("Saindo do jogo");
         Application.Quit();
     }
+
+    // Funcao para gastar score em troca de habilidade especial
+    public bool SpendScore(int amount)
+    {
+        if (score >= amount)
+        {
+            score -= amount;
+            scoreText.text = "Score: " + (int)score; // atualiza o texto na tela
+            return true;
+        }
+        return false;
+    }
 }
