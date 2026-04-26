@@ -8,6 +8,8 @@ public class EnemyFollow : MonoBehaviour
     public float speed = 2f;
     private Transform player;
 
+    public AudioClip enemyDeathSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +41,7 @@ public class EnemyFollow : MonoBehaviour
         if (collider.CompareTag("Projectile"))
         {
             FindObjectOfType<GameManager>().AddBonus(20);
+            AudioSource.PlayClipAtPoint(enemyDeathSound, transform.position);
 
             Destroy(gameObject); //bola perseguidora morre
             Destroy(collider.gameObject);

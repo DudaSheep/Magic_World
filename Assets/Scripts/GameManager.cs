@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI highestScoreText;
     public TextMeshProUGUI highestScoreTextMenu;
 
+    public AudioClip pauseSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -81,6 +83,10 @@ public class GameManager : MonoBehaviour
 
     void PauseGame()
     {
+        if (pauseSound != null)
+        {
+            AudioSource.PlayClipAtPoint(pauseSound, Camera.main.transform.position);
+        }
         pausePanel.SetActive(true);
         Time.timeScale = 0f; //congela o mundo (fisica, animacao)
         isPaused = true;

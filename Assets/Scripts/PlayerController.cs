@@ -25,6 +25,10 @@ public class PlayerController : MonoBehaviour
     public int specialPowerCost = 150; // Custo do especial
     public int numberOfProjectiles = 24; // numero de fireballs no especial
 
+    [Header("Sons")]
+    public AudioSource audioSource;
+    public AudioClip fireballSound;
+    public AudioClip deathSound;
 
     // Start is called before the first frame update
     void Start()
@@ -109,6 +113,8 @@ public class PlayerController : MonoBehaviour
         float angleStep = 360f / numberOfProjectiles;
         float angle = 0f;
 
+        audioSource.PlayOneShot(fireballSound, 0.7f); //mesmo audio reduzido
+
         for (int i = 0; i < numberOfProjectiles; i++)
         {
             // Calcula a direção baseada no ângulo para formar um círculo
@@ -162,6 +168,8 @@ public class PlayerController : MonoBehaviour
     {
         CheckMirrorFlip();
 
+        audioSource.PlayOneShot(fireballSound);
+
         Vector2 direction = (targetedMousePos - firePoint.position).normalized;
 
         // Rotacao da fireball para "olhar"
@@ -184,6 +192,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             Debug.Log("O Mago foi atingido!");
+            AudioSource.PlayClipAtPoint(deathSound, transform.position);
 
             FindObjectOfType<GameManager>().ShowGameOver();
             // inpede que o gamer ande morto

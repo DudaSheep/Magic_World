@@ -6,6 +6,8 @@ public class Enemy : MonoBehaviour
 {
 
     public float velocity = 5f;
+
+    public AudioClip enemyDeathSound;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +33,7 @@ public class Enemy : MonoBehaviour
     {
         if (collider.CompareTag("Projectile")) // Tag fireball do player
         {
+            AudioSource.PlayClipAtPoint(enemyDeathSound, transform.position);
             // Recebe os pontos pelo acerto a fireball inimiga
             FindObjectOfType<GameManager>().AddBonus(10);
 
